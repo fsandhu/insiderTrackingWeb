@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model TradeRecord {
+  id          Int      @id @default(autoincrement())
+  filingDate  DateTime
+  tradeDate   DateTime
+  ticker      String
+  companyName String
+  insiderName String
+  title       String
+  tradeType   String
+  price       Float
+  qty         Int
+  owned       Int
+  deltaOwn    String
+  value       Float
+  createdAt   DateTime @default(now())
+
+  @@unique([ticker, insiderName, filingDate, tradeType, qty, price]) // Prevent duplicate scrapes
+}
