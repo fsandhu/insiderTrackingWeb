@@ -23,7 +23,7 @@ export default function Home() {
   const [records, setRecords] = useState<TradeRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isScraping, setIsScraping] = useState(false);
-  
+
   // Default to today's date formatted as YYYY-MM-DD
   const [selectedDate, setSelectedDate] = useState(() => {
     return new Date().toISOString().split('T')[0];
@@ -80,16 +80,24 @@ export default function Home() {
           <h1>Insider Tracker</h1>
           <p>Top 20 daily insider trades from OpenInsider</p>
         </div>
-        
+
         <div className="controls">
-          <input 
-            type="date" 
-            className="date-picker"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-          />
-          <button 
-            className="btn" 
+          <div className="date-picker-group">
+            <div className="tooltip-container">
+              <span className="date-label">SEC Form 4 filing date</span>
+              <span className="tooltip-text">
+                SEC Form 4 is a public report filed when insiders buy or sell their own stock. It must be filed within two business days of the transaction.
+              </span>
+            </div>
+            <input
+              type="date"
+              className="date-picker"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+            />
+          </div>
+          <button
+            className="btn"
             onClick={handleScrape}
             disabled={isScraping}
           >
@@ -102,21 +110,21 @@ export default function Home() {
         <div className="loading">Loading records...</div>
       ) : records.length === 0 ? (
         <div className="empty-state">
-          No records found for {selectedDate}. 
+          No records found for {selectedDate}.
           Try changing the date or running a scrape.
         </div>
       ) : (
         <div className="records-grid">
           {records.map((record) => {
             const isPurchase = record.tradeType.toLowerCase().includes('purchase');
-            
+
             return (
               <article key={record.id} className="record-card">
                 <div className="card-header">
                   <div>
-                    <a 
-                      href={`https://finance.yahoo.com/quote/${record.ticker}`} 
-                      target="_blank" 
+                    <a
+                      href={`https://finance.yahoo.com/quote/${record.ticker}`}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="ticker"
                     >

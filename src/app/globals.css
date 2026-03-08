@@ -17,7 +17,8 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -44,6 +45,7 @@ header {
   font-size: 2rem;
   font-weight: 700;
   background: linear-gradient(90deg, #fff, var(--primary));
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 0.25rem;
@@ -57,7 +59,71 @@ header {
 .controls {
   display: flex;
   gap: 1rem;
-  align-items: center;
+  align-items: flex-end;
+}
+
+.date-picker-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.date-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  cursor: help;
+  border-bottom: 1px dotted var(--text-muted);
+}
+
+/* Tooltip Styles */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  width: 450;
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  text-align: left;
+  border-radius: 8px;
+  padding: 1rem;
+  position: absolute;
+  z-index: 10;
+  top: 50%;
+  right: 105%;
+  /* Position to the left of the label */
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--border);
+  text-transform: none;
+  font-weight: normal;
+  letter-spacing: normal;
+}
+
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  /* Arrow on the right side of the tooltip pointing towards label */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--border);
+}
+
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
 }
 
 .btn {
@@ -262,20 +328,21 @@ header {
   .container {
     padding: 1rem;
   }
-  
+
   header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
+
   .controls {
     width: 100%;
     justify-content: space-between;
   }
 }
 
-.loading, .empty-state {
+.loading,
+.empty-state {
   text-align: center;
   padding: 4rem 2rem;
   color: var(--text-muted);
@@ -286,8 +353,15 @@ header {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .record-card {
@@ -295,9 +369,26 @@ header {
   opacity: 0;
 }
 
-.records-grid > :nth-child(1) { animation-delay: 0.05s; }
-.records-grid > :nth-child(2) { animation-delay: 0.1s; }
-.records-grid > :nth-child(3) { animation-delay: 0.15s; }
-.records-grid > :nth-child(4) { animation-delay: 0.2s; }
-.records-grid > :nth-child(5) { animation-delay: 0.25s; }
-.records-grid > :nth-child(6) { animation-delay: 0.3s; }
+.records-grid> :nth-child(1) {
+  animation-delay: 0.05s;
+}
+
+.records-grid> :nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.records-grid> :nth-child(3) {
+  animation-delay: 0.15s;
+}
+
+.records-grid> :nth-child(4) {
+  animation-delay: 0.2s;
+}
+
+.records-grid> :nth-child(5) {
+  animation-delay: 0.25s;
+}
+
+.records-grid> :nth-child(6) {
+  animation-delay: 0.3s;
+}
