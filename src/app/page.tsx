@@ -114,7 +114,14 @@ export default function Home() {
               <article key={record.id} className="record-card">
                 <div className="card-header">
                   <div>
-                    <div className="ticker">{record.ticker}</div>
+                    <a 
+                      href={`https://finance.yahoo.com/quote/${record.ticker}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="ticker"
+                    >
+                      {record.ticker}
+                    </a>
                     <div className="company">{record.companyName}</div>
                   </div>
                   <span className={`trade-type ${isPurchase ? 'purchase' : 'sale'}`}>

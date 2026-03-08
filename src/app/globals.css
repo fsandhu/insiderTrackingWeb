@@ -149,6 +149,27 @@ header {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ticker:hover {
+  color: #fff;
+}
+
+.ticker::after {
+  content: '↗';
+  font-size: 0.8rem;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ticker:hover::after {
+  opacity: 1;
+  transform: translate(2px, -2px);
 }
 
 .company {
