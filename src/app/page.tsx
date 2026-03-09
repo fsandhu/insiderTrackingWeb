@@ -19,6 +19,8 @@ type TradeRecord = {
   value: number;
 };
 
+import { ThemeToggle } from '@/components/ThemeToggle';
+
 export default function Home() {
   const [records, setRecords] = useState<TradeRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -173,6 +175,10 @@ export default function Home() {
           })}
         </div>
       )}
+
+      <footer className="page-bottom-controls">
+        <ThemeToggle />
+      </footer>
     </main>
   );
 }
