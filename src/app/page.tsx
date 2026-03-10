@@ -20,6 +20,7 @@ type TradeRecord = {
 };
 
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { StockGraph } from '@/components/StockGraph';
 
 export default function Home() {
   const [records, setRecords] = useState<TradeRecord[]>([]);
@@ -138,6 +139,8 @@ export default function Home() {
                     {record.tradeType}
                   </span>
                 </div>
+
+                <StockGraph ticker={record.ticker} />
 
                 <div className="card-body">
                   <div className="data-group">
