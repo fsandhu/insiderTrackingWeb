@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import { prisma } from '@/lib/prisma';
 import { DateTime } from 'luxon';
 
-const OPENINSIDER_URL = 'http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=3&fdr=&td=3&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=8&cnt=100&page=1';
+const OPENINSIDER_URL = 'http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=1&fdr=&td=1&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=8&cnt=100&page=1';
 
 export async function GET() {
   try {
@@ -21,11 +21,11 @@ export async function GET() {
     const $ = cheerio.load(html);
 
     const rows = $('table.tinytable tbody tr').toArray();
-    
+
     // Parse records and limit to top 20
     const records = rows.slice(0, 20).map((row) => {
       const cols = $(row).find('td');
-      
+
       const filingDateStr = $(cols[1]).text().trim();
       const tradeDateStr = $(cols[2]).text().trim();
       const ticker = $(cols[3]).text().trim();
