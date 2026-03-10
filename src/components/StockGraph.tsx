@@ -14,6 +14,7 @@ interface StockGraphProps {
 
 export function StockGraph({ ticker }: StockGraphProps) {
   const [data, setData] = useState<ChartDataPoint[]>([]);
+  const [meta, setMeta] = useState<{ chartPreviousClose: number | null }>({ chartPreviousClose: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [showPercent, setShowPercent] = useState(true);
@@ -41,6 +42,9 @@ export function StockGraph({ ticker }: StockGraphProps) {
         const json = await res.json();
         if (isMounted && json.data) {
           setData(json.data);
+          if (json.meta) {
+            setMeta(json.meta);
+          }
         } else if (isMounted) {
           setError(true);
         }
@@ -59,13 +63,16 @@ export function StockGraph({ ticker }: StockGraphProps) {
     };
   }, [ticker, timeframe]);
 
+  const referencePrice = meta.chartPreviousClose !== null && meta.chartPreviousClose !== undefined 
+    ? meta.chartPreviousClose 
+    : (data.length > 0 ? data[0].price : 0);
+
   const lineColor = useMemo(() => {
-    if (data.length < 2) return '#888gray';
-    const firstPrice = data[0].price;
+    if (data.length < 1) return '#888gray';
     const lastPrice = data[data.length - 1].price;
-    // Green for up, Red for down
-    return lastPrice >= firstPrice ? '#10b981' : '#ef4444'; 
-  }, [data]);
+    // Green for up, Red for down relative to reference price
+    return lastPrice >= referencePrice ? '#10b981' : '#ef4444'; 
+  }, [data, referencePrice]);
 
   if (loading) {
     return <div className="stock-graph-skeleton animate-pulse" style={{ height: '40px', width: '100%', backgroundColor: 'var(--surface-color)', borderRadius: '4px' }}></div>;
@@ -81,11 +88,14 @@ export function StockGraph({ ticker }: StockGraphProps) {
   const maxPrice = Math.max(...prices);
   const padding = (maxPrice - minPrice) * 0.1;
 
-  const firstPrice = data[0]?.price || 0;
   const lastPrice = data[data.length - 1]?.price || 0;
-  const isPositive = lastPrice >= firstPrice;
-  const perfAbs = lastPrice - firstPrice;
-  const perfPct = firstPrice > 0 ? (perfAbs / firstPrice) * 100 : 0;
+  
+  // To avoid calculating when there's no data
+  if (data.length === 0) return null;
+
+  const isPositive = lastPrice >= referencePrice;
+  const perfAbs = lastPrice - referencePrice;
+  const perfPct = referencePrice > 0 ? (perfAbs / referencePrice) * 100 : 0;
 
   const displayValue = showPercent 
     ? `${isPositive ? '+' : ''}${perfPct.toFixed(2)}%`

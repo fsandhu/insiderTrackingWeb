@@ -71,7 +71,12 @@ export async function GET(request: NextRequest) {
       };
     }).filter((item: any) => item.price !== null); // Filter out any null prices
 
-    return NextResponse.json({ data: chartData });
+    return NextResponse.json({ 
+      data: chartData,
+      meta: {
+        chartPreviousClose: result.meta?.chartPreviousClose || null
+      }
+    });
   } catch (error) {
     console.error('API Route Error:', error);
     return NextResponse.json(
