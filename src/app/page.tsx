@@ -182,6 +182,9 @@ export default function Home() {
       <footer className="page-bottom-controls">
         <ThemeToggle />
       </footer>
+      <div style={{ textAlign: 'center', paddingBottom: '2rem', opacity: 0.7, fontSize: '0.9rem' }}>
+        vibecoded by Fateh Sandhu 😎
+      </div>
     </main>
   );
 }
