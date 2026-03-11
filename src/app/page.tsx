@@ -104,7 +104,7 @@ export default function Home() {
             onClick={handleScrape}
             disabled={isScraping}
           >
-            {isScraping ? 'Scraping...' : 'Force Scrape Now'}
+            {isScraping ? 'Scraping...' : 'Manually Fetch Trades'}
           </button>
         </div>
       </header>
