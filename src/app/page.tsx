@@ -54,7 +54,7 @@ export default function Home() {
   const handleScrape = async () => {
     setIsScraping(true);
     try {
-      const res = await fetch('/api/scrape');
+      const res = await fetch(`/api/scrape?date=${selectedDate}`);
       const data = await res.json();
       alert(data.message || 'Scraping finished!');
       // Refresh the current view
@@ -163,10 +163,14 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="card-footer">
+                <div className="card-footer" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto auto', gap: '1rem' }}>
                   <div className="insider-info">
                     <span className="data-label">Insider</span>
                     <span className="insider-name">{record.insiderName} ({record.title})</span>
+                  </div>
+                  <div className="insider-info" style={{ alignItems: 'flex-start' }}>
+                    <span className="data-label">Filing Date</span>
+                    <span>{new Date(record.filingDate).toLocaleDateString()}</span>
                   </div>
                   <div className="insider-info" style={{ alignItems: 'flex-end' }}>
                     <span className="data-label">Trade Date</span>

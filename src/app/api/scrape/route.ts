@@ -1,13 +1,26 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import { prisma } from '@/lib/prisma';
 import { DateTime } from 'luxon';
 
-const OPENINSIDER_URL = 'http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=1&fdr=&td=1&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=8&cnt=100&page=1';
-
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const response = await fetch(OPENINSIDER_URL, {
+    const searchParams = request.nextUrl.searchParams;
+    const dateParam = searchParams.get('date');
+
+    let openInsiderUrl = 'http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=1&fdr=&td=1&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=8&cnt=100&page=1';
+
+    if (dateParam) {
+      // dateParam is YYYY-MM-DD
+      const dateObj = DateTime.fromISO(dateParam);
+      const formattedFilingDate = dateObj.toFormat("MM'%2F'dd'%2F'yyyy") + '+-+' + dateObj.toFormat("MM'%2F'dd'%2F'yyyy");
+      const twoDaysAgoObj = dateObj.minus({ days: 2 });
+      const formattedTradeDate = twoDaysAgoObj.toFormat("MM'%2F'dd'%2F'yyyy") + '+-+' + dateObj.toFormat("MM'%2F'dd'%2F'yyyy");
+      
+      openInsiderUrl = `http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=-1&fdr=${formattedFilingDate}&td=-1&tdr=${formattedTradeDate}&fdlyl=&fdlyh=&daysago=&xp=1&xs=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=100&page=1`;
+    }
+
+    const response = await fetch(openInsiderUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       }
