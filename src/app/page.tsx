@@ -38,7 +38,19 @@ export default function Home() {
       const res = await fetch(`/api/records?date=${date}`);
       const data = await res.json();
       if (data.records) {
-        setRecords(data.records);
+        const sortedRecords = [...data.records].sort((a: TradeRecord, b: TradeRecord) => {
+          // Primary sort by value (descending)
+          if (b.value !== a.value) {
+            return b.value - a.value;
+          }
+          // Secondary sort by delta of ownership (descending)
+          const parseDelta = (d: string) => {
+            if (d.toLowerCase() === 'new' || d.includes('>')) return Infinity;
+            return parseFloat(d.replace(/[^0-9.-]/g, '')) || 0;
+          };
+          return parseDelta(b.deltaOwn) - parseDelta(a.deltaOwn);
+        });
+        setRecords(sortedRecords);
       }
     } catch (err) {
       console.error('Failed to fetch records', err);

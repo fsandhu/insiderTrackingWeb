@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       const twoDaysAgoObj = dateObj.minus({ days: 2 });
       const formattedTradeDate = twoDaysAgoObj.toFormat("MM'%2F'dd'%2F'yyyy") + '+-+' + dateObj.toFormat("MM'%2F'dd'%2F'yyyy");
 
-      openInsiderUrl = `http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=-1&fdr=${formattedFilingDate}&td=-1&tdr=${formattedTradeDate}&fdlyl=&fdlyh=&daysago=&xp=1&xs=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=100&page=1`;
+      openInsiderUrl = `http://openinsider.com/screener?s=&o=&pl=&ph=&ll=&lh=&fd=-1&fdr=${formattedFilingDate}&td=-1&tdr=${formattedTradeDate}&fdlyl=&fdlyh=&daysago=&xp=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=100&page=1`;
     }
 
     const response = await fetch(openInsiderUrl, {
